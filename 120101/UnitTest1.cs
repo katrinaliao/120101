@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
@@ -54,7 +55,21 @@ namespace _120101
         private bool Valid106()
         {
             var number = int.Parse(Content);
-            return (number > 0 && number < 12) || number == 99;
+            return (number >= 1 && number <= 11) || number == 99;
+        }
+
+        private bool Valid107()
+        {
+            var number = int.Parse(Content);
+            var numberlist = Enumerable.Range(1, 14).Except(new[] {2, 12});
+            numberlist.Select(x => x.ToString()).Concat(new[] {"2a", "2b", "99"});
+
+            return ((AcceptIn107(number)) && number!= 2 && number!= 12) || number == 99 || Content == "2a" || Content == "2b";
+        }
+
+        private static bool AcceptIn107(int number)
+        {
+            return number > 0 && number < 15;
         }
 
         public bool IsValid()
