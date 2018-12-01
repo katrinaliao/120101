@@ -23,20 +23,24 @@ namespace _120101
             };
 
             var betDto = new BetDto();
-            var actual = betDto.BetDtoConvert(bet);
+            var actual = betDto.BetDtoConvert(bet, p => new BetDto()
+            {
+                Amount = (int)Math.Round(p.Stake),
+                BetId = p.Id,
+                Date = p.CreatedDate.ToString("yyyy MM dd")
+            });
             Assert.AreEqual(actual.BetId, 123);
             Assert.AreEqual(actual.Amount, 2);
-            Assert.AreEqual(actual.Date, "12/1/2018 12:00:00 AM");
+            Assert.AreEqual(actual.Date, "2018 12 01");
         }
-
     }
+}
 
-    internal class Bet
-    {
-        public int Id { get; set; }
-        public decimal Stake { get; set; }
-        public DateTime CreatedDate { get; set; }
-    }
+public class Bet
+{
+    public int Id { get; set; }
+    public decimal Stake { get; set; }
+    public DateTime CreatedDate { get; set; }
 }
 
 public class BetDto
@@ -45,14 +49,8 @@ public class BetDto
     public string Date { get; set; }
     public int Amount { get; set; }
 
-    public BetDto BetDtoConvert(Bet bet)
+    public BetDto BetDtoConvert(Bet bet, Func<Bet, BetDto> mapper)
     {
-        return new BetDto()
-        {
-            Amount = (int)Math.Round(bet.Stake),
-            BetId = bet.Id,
-            Date = bet.CreatedDate.ToString()
-        };
+        return mapper(bet);
     }
-
 }
